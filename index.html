@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium User Panel - Bonus Updated</title>
+    <title>Premium User Panel - Restored</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     
+    <script src='//libtl.com/sdk.js' data-zone='10463078' data-sdk='show_10463078'></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         body {
@@ -26,7 +28,7 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .nav-active { color: #a78bfa !important; transform: scale(1.1); }
         
-        #toast { visibility: hidden; min-width: 250px; background: #a78bfa; color: white; text-align: center; border-radius: 12px; padding: 15px; position: fixed; z-index: 2000; left: 50%; transform: translateX(-50%); bottom: 110px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        #toast { visibility: hidden; min-width: 250px; background: #a78bfa; color: white; text-align: center; border-radius: 12px; padding: 15px; position: fixed; z-index: 2000; left: 50%; transform: translateX(-50%); bottom: 110px; font-weight: bold; }
         #toast.show { visibility: visible; animation: slideUp 0.5s forwards; }
         @keyframes slideUp { from { bottom: 0; opacity: 0; } to { bottom: 110px; opacity: 1; } }
 
@@ -50,10 +52,10 @@
 
     <div id="timer-modal">
         <div class="timer-box shadow-2xl">
-            <h3 class="text-xl font-bold">Video Playing...</h3>
+            <h3 class="text-xl font-bold">Ad Running...</h3>
             <div class="count-circle" id="countdown-display">30</div>
-            <p class="text-gray-400 text-sm mb-4">Wait for 30 seconds to get reward.</p>
-            <button onclick="cancelTask()" class="text-red-400 text-xs font-bold underline">Cancel & Back</button>
+            <p class="text-gray-400 text-sm mb-4">Please wait until timer ends.</p>
+            <button onclick="cancelTask()" class="text-red-400 text-xs font-bold underline">Cancel Task</button>
         </div>
     </div>
 
@@ -75,22 +77,21 @@
                 <p class="text-white/70 text-sm font-medium">Total Earnings</p>
                 <h3 class="text-4xl font-bold mt-1">৳ <span id="main-balance">0.00</span></h3>
                 <div class="flex gap-3 mt-8">
-                    <button onclick="switchPage('wallet')" class="flex-1 bg-white text-purple-700 py-3.5 rounded-2xl font-bold text-sm">Withdraw</button>
-                    <button onclick="claimDailyBonus()" class="flex-1 glass text-white py-3.5 rounded-2xl font-bold text-sm border border-white/20">Daily Bonus</button>
+                    <button onclick="showAdThenPage('wallet')" class="flex-1 bg-white text-purple-700 py-3.5 rounded-2xl font-bold text-sm">Withdraw</button>
+                    <button onclick="showAdThenBonus()" class="flex-1 glass text-white py-3.5 rounded-2xl font-bold text-sm border border-white/20">Daily Bonus</button>
                 </div>
             </div>
         </section>
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="glass p-5 rounded-3xl text-center"><h3 class="text-2xl font-bold" id="task-count">0</h3><p class="text-[10px] text-gray-400 uppercase">Ads Watched</p></div>
-            <div class="glass p-5 rounded-3xl text-center"><h3 class="text-2xl font-bold">৳10</h3><p class="text-[10px] text-gray-400 uppercase">Refer Earn</p></div>
+        <div class="grid grid-cols-2 gap-4 mb-6 text-center">
+            <div class="glass p-5 rounded-3xl"><h3 class="text-2xl font-bold" id="task-count">0</h3><p class="text-[10px] text-gray-400 uppercase tracking-widest">Ads Watched</p></div>
+            <div class="glass p-5 rounded-3xl"><h3 class="text-2xl font-bold">৳10</h3><p class="text-[10px] text-gray-400 uppercase tracking-widest">Refer Earn</p></div>
         </div>
     </div>
 
     <div id="task-page" class="page px-5">
-        <h3 class="text-xl font-bold mb-5 text-purple-400">Earning Tasks</h3>
+        <h3 class="text-xl font-bold mb-5 text-purple-400">Available Tasks</h3>
         <div id="tasks-container" class="space-y-4">
-            <p class="text-center text-gray-400 text-sm">Loading tasks...</p>
-        </div>
+            </div>
     </div>
 
     <div id="refer-page" class="page px-5">
@@ -103,16 +104,16 @@
             <p class="text-gray-400 text-xs mb-6 px-4">Earn ৳10 for every user join.</p>
             <div class="bg-slate-800 p-4 rounded-2xl flex justify-between items-center border border-white/5 mb-4">
                 <span id="refer-code-text" class="text-sm font-bold text-purple-300">ADS78291</span>
-                <button onclick="copyRefer()" class="text-xs bg-purple-600 px-4 py-2 rounded-xl font-bold">Copy</button>
+                <button onclick="runMainAd(); copyRefer()" class="text-xs bg-purple-600 px-4 py-2 rounded-xl font-bold">Copy</button>
             </div>
-            <button onclick="showToast('Link shared!')" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 py-4 rounded-2xl font-bold shadow-lg">Share Now</button>
+            <button onclick="runMainAd()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 py-4 rounded-2xl font-bold shadow-lg">Share Now</button>
         </div>
     </div>
 
     <div id="wallet-page" class="page px-5">
         <h3 class="text-xl font-bold mb-5 text-purple-400">Withdraw Wallet</h3>
         <div class="glass p-6 rounded-[2rem]">
-            <p class="text-xs text-yellow-500 mb-4 font-bold">Min Withdrawal: <span id="min-limit-text">৳100</span></p>
+            <p class="text-xs text-yellow-500 mb-4 font-bold text-center">Min Withdrawal: <span id="min-limit-text">৳100</span></p>
             <select id="pay-method" class="w-full bg-slate-800 border border-white/10 p-4 rounded-2xl mb-4 outline-none text-sm text-white">
                 <option value="bKash">bKash</option>
                 <option value="Nagad">Nagad</option>
@@ -137,11 +138,11 @@
     </div>
 
     <nav class="fixed bottom-4 left-4 right-4 h-20 glass rounded-[2.5rem] flex justify-around items-center z-[100] px-2 shadow-2xl">
-        <button onclick="switchPage('home')" id="nav-home" class="flex flex-col items-center gap-1 nav-active text-gray-400 transition-all"><i class="fa-solid fa-house text-xl"></i><span class="text-[9px] font-bold">Home</span></button>
-        <button onclick="switchPage('task')" id="nav-task" class="flex flex-col items-center gap-1 text-gray-400 transition-all"><i class="fa-solid fa-list-check text-xl"></i><span class="text-[9px] font-bold">Task</span></button>
-        <button onclick="switchPage('refer')" id="nav-refer" class="flex flex-col items-center gap-1 text-gray-400 transition-all"><i class="fa-solid fa-users text-xl"></i><span class="text-[9px] font-bold">Refer</span></button>
-        <button onclick="switchPage('wallet')" id="nav-wallet" class="flex flex-col items-center gap-1 text-gray-400 transition-all"><i class="fa-solid fa-wallet text-xl"></i><span class="text-[9px] font-bold">Wallet</span></button>
-        <button onclick="switchPage('profile')" id="nav-profile" class="flex flex-col items-center gap-1 text-gray-400 transition-all"><i class="fa-solid fa-user text-xl"></i><span class="text-[9px] font-bold">Profile</span></button>
+        <button onclick="showAdThenPage('home')" id="nav-home" class="flex flex-col items-center gap-1 nav-active text-gray-400 transition-all"><i class="fa-solid fa-house text-xl"></i><span class="text-[9px] font-bold">Home</span></button>
+        <button onclick="showAdThenPage('task')" id="nav-task" class="flex flex-col items-center gap-1 text-gray-400 transition-all"><i class="fa-solid fa-list-check text-xl"></i><span class="text-[9px] font-bold">Task</span></button>
+        <button onclick="showAdThenPage('refer')" id="nav-refer" class="flex flex-col items-center gap-1 text-gray-400 transition-all"><i class="fa-solid fa-users text-xl"></i><span class="text-[9px] font-bold">Refer</span></button>
+        <button onclick="showAdThenPage('wallet')" id="nav-wallet" class="flex flex-col items-center gap-1 text-gray-400 transition-all"><i class="fa-solid fa-wallet text-xl"></i><span class="text-[9px] font-bold">Wallet</span></button>
+        <button onclick="showAdThenPage('profile')" id="nav-profile" class="flex flex-col items-center gap-1 text-gray-400 transition-all"><i class="fa-solid fa-user text-xl"></i><span class="text-[9px] font-bold">Profile</span></button>
     </nav>
 
     <script>
@@ -154,118 +155,98 @@
             messagingSenderId: "49081496929",
             appId: "1:49081496929:web:ff1522dc639cbe3a6b4120"
         };
-        
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const userId = "78291"; 
 
         let userData = { balance: 0.00, adsCount: 0, lastBonus: "" };
-        let withdrawConfig = { minAmount: 100, status: "Open" };
+        let minWithdrawLimit = 100;
         let activeTimer = null;
 
+        function runMainAd() {
+            if (typeof show_10463078 === 'function') { show_10463078(); }
+        }
+
+        function showAdThenPage(p) { runMainAd(); switchPage(p); }
+        function showAdThenBonus() { runMainAd(); claimDailyBonus(); }
+
         function loadData() {
-            database.ref('users/' + userId).on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) { userData = data; updateUI(); } else { saveData(); }
+            database.ref('users/' + userId).on('value', (s) => {
+                if(s.val()) { userData = s.val(); updateUI(); }
             });
 
-            database.ref('settings/withdrawal').on('value', (snapshot) => {
-                const config = snapshot.val();
-                if(config) {
-                    withdrawConfig = config;
-                    document.getElementById('min-limit-text').innerText = "৳" + config.minAmount;
+            // Admin Settings Fetch
+            database.ref('settings/minWithdraw').on('value', (s) => {
+                if(s.val()) {
+                    minWithdrawLimit = parseFloat(s.val());
+                    document.getElementById('min-limit-text').innerText = '৳' + minWithdrawLimit;
                 }
             });
+
             loadTasks();
         }
 
         function loadTasks() {
             database.ref('tasks').on('value', (snapshot) => {
-                const tasks = snapshot.val();
                 const container = document.getElementById('tasks-container');
-                container.innerHTML = ''; 
-                if (tasks) {
-                    Object.keys(tasks).forEach(key => {
-                        const task = tasks[key];
-                        const videoLink = task.link ? task.link : "#";
+                container.innerHTML = '';
+                const tasks = snapshot.val();
+                if(tasks) {
+                    Object.keys(tasks).forEach(id => {
+                        const t = tasks[id];
                         container.innerHTML += `
                             <div class="glass p-5 rounded-3xl flex items-center justify-between border-l-4 border-purple-500">
-                                <div>
-                                    <h4 class="font-bold text-sm">${task.name}</h4>
-                                    <p class="text-xs text-green-400 font-bold">+৳${parseFloat(task.reward).toFixed(2)}</p>
-                                </div>
-                                <button onclick="startAdTimer(${task.reward}, '${videoLink}')" class="bg-purple-600 px-6 py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">Watch</button>
-                            </div>
-                        `;
+                                <div><h4 class="font-bold text-sm">${t.name}</h4><p class="text-xs text-green-400 font-bold">+৳${t.reward}</p></div>
+                                <button onclick="startAdTimer(${t.reward}, '${t.link}')" class="bg-purple-600 px-6 py-2.5 rounded-xl text-xs font-bold">Watch</button>
+                            </div>`;
                     });
-                } else {
-                    container.innerHTML = '<p class="text-gray-400 text-center text-sm">No tasks available.</p>';
                 }
             });
         }
 
         function startAdTimer(reward, link) {
-            if (link && link !== "#") { window.open(link, '_blank'); }
+            runMainAd();
+            if(link && link !== "#") window.open(link, '_blank');
             const modal = document.getElementById('timer-modal');
             const display = document.getElementById('countdown-display');
             let timeLeft = 30;
             modal.style.display = 'flex';
             display.innerText = timeLeft;
-            if (activeTimer) clearInterval(activeTimer);
+
+            if(activeTimer) clearInterval(activeTimer);
             activeTimer = setInterval(() => {
                 timeLeft--;
                 display.innerText = timeLeft;
-                if (timeLeft <= 0) {
+                if(timeLeft <= 0) {
                     clearInterval(activeTimer);
                     modal.style.display = 'none';
-                    userData.balance += parseFloat(reward);
-                    userData.adsCount += 1;
-                    saveData();
-                    showToast(`৳${reward.toFixed(2)} Added!`);
+                    userData.balance = (userData.balance || 0) + parseFloat(reward);
+                    userData.adsCount = (userData.adsCount || 0) + 1;
+                    database.ref('users/' + userId).set(userData);
+                    showToast("Task Completed!");
                 }
             }, 1000);
         }
 
-        function cancelTask() {
-            clearInterval(activeTimer);
-            document.getElementById('timer-modal').style.display = 'none';
-            showToast("Task Cancelled!");
-        }
-
         function handleWithdraw() {
-            if(withdrawConfig.status === "Closed") {
-                showToast("System Closed for Maintenance!");
-                return;
-            }
+            runMainAd();
             const amt = parseFloat(document.getElementById('draw-amount').value);
             const num = document.getElementById('pay-number').value;
-            const method = document.getElementById('pay-method').value;
-
-            if(!num || isNaN(amt) || amt < withdrawConfig.minAmount) {
-                showToast(`Min Withdrawal ৳${withdrawConfig.minAmount}`);
-                return;
-            }
-            if(amt > userData.balance) {
-                showToast("Insufficient Balance!");
-                return;
-            }
+            if(!num || isNaN(amt) || amt < minWithdrawLimit) return showToast("Min ৳" + minWithdrawLimit + " Required");
+            if(amt > userData.balance) return showToast("Insufficient Balance");
             userData.balance -= amt;
-            saveData();
-            database.ref('withdrawals').push({ userId, amount: amt, phone: num, method, status: "Pending", timestamp: Date.now() });
+            database.ref('users/' + userId).set(userData);
+            database.ref('withdrawals').push({ userId, amount: amt, phone: num, method: document.getElementById('pay-method').value, status: "Pending", timestamp: Date.now() });
             showToast("Withdraw Request Sent!");
         }
 
         function claimDailyBonus() {
             const today = new Date().toDateString();
-            if(userData.lastBonus === today) {
-                showToast("Already claimed today!");
-            } else {
-                // Modified: 10 taka to 2 taka bonus
-                userData.balance = (userData.balance || 0) + 2;
-                userData.lastBonus = today;
-                saveData();
-                showToast("Daily Bonus ৳2 Added!");
-            }
+            if(userData.lastBonus === today) return showToast("Already claimed!");
+            userData.balance = (userData.balance || 0) + 2;
+            userData.lastBonus = today;
+            database.ref('users/' + userId).set(userData);
+            showToast("Daily Bonus ৳2 Added!");
         }
 
         function updateUI() {
@@ -275,20 +256,24 @@
             document.getElementById('task-count').innerText = userData.adsCount || 0;
         }
 
-        function switchPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.getElementById(pageId + '-page').classList.add('active-page');
+        function switchPage(p) {
+            document.querySelectorAll('.page').forEach(el => el.classList.remove('active-page'));
+            document.getElementById(p + '-page').classList.add('active-page');
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('nav-active'));
-            document.getElementById('nav-' + pageId).classList.add('nav-active');
+            const navBtn = document.getElementById('nav-' + p);
+            if(navBtn) navBtn.classList.add('nav-active');
         }
 
-        function saveData() { database.ref('users/' + userId).set(userData); }
-        function copyRefer() { showToast("Code Copied!"); }
+        function copyRefer() {
+            const code = document.getElementById('refer-code-text').innerText;
+            navigator.clipboard.writeText(code);
+            showToast("Code Copied!");
+        }
 
-        function showToast(msg) {
+        function showToast(m) {
             const t = document.getElementById("toast");
-            t.innerText = msg; t.className = "show";
-            setTimeout(() => { t.className = ""; }, 3000);
+            t.innerText = m; t.className = "show";
+            setTimeout(() => t.className = "", 3000);
         }
 
         loadData();
